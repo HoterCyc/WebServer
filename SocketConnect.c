@@ -1,7 +1,9 @@
 #include "SocketConnect.h"
 #include "EventTree.h"
 #include "global.h"
+#include "Http.h"
 #include <unistd.h>
+#include <sys/fcntl.h>
 /**
  * 初始化服务器端socket
  * @param  port 端口
@@ -10,6 +12,11 @@
 SocketConnect* InitSocket(uint16_t port)
 {
     SocketConnect* server = (SocketConnect*)malloc(sizeof(SocketConnect));
+    if(server == NULL)
+    {
+        printf("malloc error:%s\n", __func__);
+        exit(1);
+    }
     server->ServerFd = socket(AF_INET, SOCK_STREAM, 0);
     if(server->ServerFd < -1)
     {
@@ -48,10 +55,11 @@ void AcceptConnect(void* arg)
     socklen_t len = sizeof(client);
     int con = accept(node->fd, (struct sockaddr*)&client, &len);
 
-    EventNode* newNode = CreateEventNode(con, EPOLLIN, DealHttp, NULL);
-    newNode->arg = newNode;
+    EventNode* newNode = CreateEventNode(con, EPOLLIN, DealHttp);
+
     AddEvent(eventTree, newNode);
-    printf("客户端连接\n");
+    if(DEBUG)
+        printf("客户端连接\n");
 }
 void DealHttp(void* arg)
 {
@@ -63,6 +71,26 @@ void DealHttp(void* arg)
         DeleteEvent(eventTree, node);
     }else {
         buf[n] = '\0';
-        printf("%s\n", buf);
+        // printf("%s\n", buf);
+        RequestNode* p =  CreatRequest(node, buf, HttpMain);
+        AddRequest(requests, p);
+        // DeleteEvent(eventTree, node);
+        // printf("%s\n", buf);
+        // strcpy(buf, "HTTP/1.1 200 OK\r\nDate: Mon, 28 Aug 2017 17:58:24 GMT\r\nServer: Apache/2.4.27 (Debian)\r\nVary: Accept-Encoding\r\nContent-Length: 8\r\nKeep-Alive: timeout=5, max=98\r\n\r\n");
+        // int fp = open("index.html",O_CREAT|O_RDWR);
+        // read(fp, &buf[strlen(buf)], sizeof(buf));
+        // write(node->fd, buf, strlen(buf));
     }
 }
+// void* sendinfo(void* arg)
+// {
+//     RequestNode* p = (RequestNode*)arg;
+//
+//     return NULL;
+//     write(p->RquestInfo->fd, "server", sizeof("server"));
+//     while(1);
+//     // sleep(2);
+//     // int n = 0;
+//     // while(n++<100000000)while(n++<100000000);
+//     return NULL;
+// }

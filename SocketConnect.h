@@ -30,6 +30,7 @@ void CloseSocket(SocketConnect* server);
 
 void AcceptConnect(void* arg);
 
+// void* sendinfo(void* arg);
 
 void DealHttp(void* arg);
 #endif

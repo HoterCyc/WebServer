@@ -16,7 +16,9 @@ plinkTab CreatLinkTab()
 {
 	plinkTab linkTab = (plinkTab)malloc(sizeof(tlinkTab));
 	if(linkTab == NULL)
-		return NULL;
+	{
+		printf("malloc error%s\n", __func__);
+	}
 	linkTab->pHead = NULL;
 	linkTab->pTail = NULL;
 	linkTab->sum = 0;
@@ -97,7 +99,7 @@ int DeleteLinkTabNode(plinkTab linkTab, void* linkNode)
     {
         return -1;
     }
-    // pthread_mutex_lock(&(linkTab->mutex));
+    pthread_mutex_lock(&(linkTab->mutex));
     if(linkTab->pHead == linkNode)
     {
         linkTab->pHead = linkTab->pHead->next;
@@ -107,7 +109,7 @@ int DeleteLinkTabNode(plinkTab linkTab, void* linkNode)
             linkTab->pTail = NULL;
         }
 		free(linkNode);
-        // pthread_mutex_unlock(&(linkTab->mutex));
+        pthread_mutex_unlock(&(linkTab->mutex));
         return 0;
     }
     pnode pTempNode = linkTab->pHead;
@@ -122,12 +124,12 @@ int DeleteLinkTabNode(plinkTab linkTab, void* linkNode)
                 linkTab->pTail = NULL;
             }
 			free(linkNode);
-            // pthread_mutex_unlock(&(linkTab->mutex));
+            pthread_mutex_unlock(&(linkTab->mutex));
             return 0;
         }
         pTempNode = pTempNode->next;
     }
-    // pthread_mutex_unlock(&(linkTab->mutex));
+    pthread_mutex_unlock(&(linkTab->mutex));
     return -1;
 }
 
@@ -144,7 +146,7 @@ void* SearchlinkTabNode(plinkTab linkTab, int condition(void* linkNode, void* ai
 	if(linkTab == NULL || condition == NULL)
 		return NULL;
 	pnode p = linkTab->pHead;
-	while(p != linkTab->pTail)
+	while(p)
 	{
 		if(condition((void*)p, aim) == 1)
 			return p;

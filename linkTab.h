@@ -2,15 +2,16 @@
 #ifndef _LINK_TAB_H_
 #define _LINK_TAB_H_
 
+#include <pthread.h>
 /**
  * 节点
  * next指向下一节点
  * showWay 显示链表节点数据
  */
 
-typedef struct node
+typedef struct linknode
 {
-	struct node* next;
+	struct linknode* next;
 	void (*showWay)(void* x);
 
 } tnode, *pnode;
@@ -21,9 +22,11 @@ typedef struct node
  */
 typedef struct linkTab
 {
+	pthread_mutex_t mutex;
 	pnode pHead;
 	pnode pTail;
 	int sum;
+
 } tlinkTab, *plinkTab;
 
 
