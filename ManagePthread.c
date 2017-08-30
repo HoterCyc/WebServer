@@ -21,9 +21,9 @@ void* ManageHandel(void* arg)
         {
             AddPthread(pool,0);
         }else if(sum > 10){
-            DeletePthread(pool,2);
+            // DeletePthread(pool,0);
         }
-        sleep(1);
+        usleep(700);
     }
 
     return NULL;

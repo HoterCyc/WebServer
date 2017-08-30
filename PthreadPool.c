@@ -85,7 +85,7 @@ void* PthreadHandel(void* arg)
         pthread_mutex_lock(&(pthreadPool->LockActiveNum));
         pthreadPool->ActiveNum--;
         pthread_mutex_unlock(&(pthreadPool->LockActiveNum));
-        DeleteEvent(eventTree, p->RquestInfo);
+        // DeleteEvent(eventTree, p->RquestInfo);
         // usleep(50);
     }
     return NULL;

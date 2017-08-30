@@ -32,7 +32,7 @@ void Push(Queue* queue, void* NewNode)
     node* p = (node*)NewNode;
     pthread_mutex_lock(&(queue->lock));
 
-    if(IsEmpty(queue) == 0)
+    if(IsEmpty(queue) == 1)
     {
         // printf("队列添加\n");
         p->next = NULL;
@@ -58,7 +58,7 @@ void* Pop(Queue* queue)
 {
     node* p=NULL;
     pthread_mutex_lock(&(queue->lock));
-    if(IsEmpty(queue) != 0)
+    if(IsEmpty(queue) == 0)
     {
         p = queue->tail;
         queue->tail = queue->tail->pre;
@@ -74,5 +74,5 @@ void* Pop(Queue* queue)
  */
 int IsEmpty(Queue* queue)
 {
-    return queue->num;
+    return queue->num == 0 ? 1 : 0;
 }
