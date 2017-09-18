@@ -16,8 +16,9 @@ int main()
     // manage = CreataManage(ManageHandel,pthreadPool);
     for(int i=0; i<5; i++)
     {
+        AcceptTask* task = CreateAcceptTask(server->ServerFd);
         //创建监听事件
-        EventNode* newNode = CreateEventNode(server->ServerFd, EPOLLIN, AcceptConnect);
+        EventNode* newNode = CreateEventNode(server->ServerFd, EPOLLIN, task );
 
         //添加监听事件
         AddEvent(eventTree, newNode);

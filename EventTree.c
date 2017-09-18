@@ -36,14 +36,17 @@ EventTree* InitEventTree(unsigned int ActiveEventNum)
  */
 EventNode* CreateEventNode(int fd, int event, void* task)
 {
+
     EventNode* newNode = malloc(sizeof(EventNode));
     if(newNode == NULL)
     {
         printf("malloc error\n");
         exit(1);
     }
-    newNode->task->arg = newNode;
+
+    // printf("fuck\n");
     newNode->task = task;
+    newNode->task->arg = task;
     // newNode->arg = newNode;
     // newNode->CallHandel = handel;
     newNode->event = event;
@@ -58,6 +61,7 @@ EventNode* CreateEventNode(int fd, int event, void* task)
  */
 void AddEvent(EventTree* eventTree, EventNode* newNode)
 {
+    printf("fuckk\n");
     struct epoll_event new;
     new.events = newNode->event;
     new.data.ptr = newNode;
@@ -91,13 +95,13 @@ void WaitEvent(EventTree* eventTree)
     while(1)
     {
         int nready = epoll_wait(eventTree->Root, eventTree->ActiveEvent, eventTree->ActiveEventNum, -1);
-        if(DEBUG)
-            printf("所有事件:%d,活动事件%d\n", eventTree->HasNum,nready);
+        // if(DEBUG)
+        //     printf("所有事件:%d,活动事件%d\n", eventTree->HasNum,nready);
         for(int i=0; i<nready; i++)
         {
             EventNode* activeNode = (EventNode*)(eventTree->ActiveEvent[i].data.ptr);
             // activeNode->CallHandel(activeNode->arg);
-            AddTask(pthreadPool, activeNode);
+            AddTask(pthreadPool, activeNode->task);
         }
         // nready = 0;
     }

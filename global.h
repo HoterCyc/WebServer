@@ -5,6 +5,7 @@
 #include "DealRequest.h"
 // #include "PthreadPool.h"
 #include "CPthreadPool.h"
+#include "AcceptTask.h"
 // #include "ManagePthread.h"
 
 #define DEBUG 1

@@ -32,5 +32,5 @@ void CloseSocket(SocketConnect* server);
 
 // void* sendinfo(void* arg);
 
-void DealHttp(void* arg);
+// void DealHttp(void* arg);
 #endif

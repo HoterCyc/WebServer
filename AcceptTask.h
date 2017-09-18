@@ -14,9 +14,9 @@ typedef struct AcceptTask{
 
 void* Handel(void* arg);
 
-AcceptTask* CreateAcceptTask(int fd, void* handel, void* arg);
+AcceptTask* CreateAcceptTask(int fd);
 
-
+void* AcceptConnect(void* arg);
 
 
 

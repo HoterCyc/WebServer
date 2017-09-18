@@ -157,7 +157,7 @@ int AddPthread(PthreadPool* pool, unsigned int num)
         pthread_create(&newP->pid, NULL, Handel, pool);
         AddLinkTabNode(pool->Pool, newP);           //链表是线程安全的
         pthread_detach(newP->pid);
-        // printf("创建线程\n");
+        printf("创建线程\n");
     }
     return i;
 }
