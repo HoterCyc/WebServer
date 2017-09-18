@@ -28,7 +28,7 @@ SocketConnect* InitSocket(uint16_t port);
 void CloseSocket(SocketConnect* server);
 
 
-void AcceptConnect(void* arg);
+// void AcceptConnect(void* arg);
 
 // void* sendinfo(void* arg);
 

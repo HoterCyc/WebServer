@@ -11,9 +11,9 @@ int main()
     //初始化请求数据队列
     requests = InitRequestQueue();
     //初始化线程池
-    pthreadPool = CreatPthreadPool(10, 10);
+    pthreadPool = CreatePthreadPool();
     //线程池管理
-    manage = CreataManage(ManageHandel,pthreadPool);
+    // manage = CreataManage(ManageHandel,pthreadPool);
     for(int i=0; i<5; i++)
     {
         //创建监听事件

@@ -3,8 +3,9 @@
 #include "EventTree.h"
 #include "Queue.h"
 #include "DealRequest.h"
-#include "PthreadPool.h"
-#include "ManagePthread.h"
+// #include "PthreadPool.h"
+#include "CPthreadPool.h"
+// #include "ManagePthread.h"
 
 #define DEBUG 1
 //服务器socke

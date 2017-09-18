@@ -2,7 +2,11 @@
 #include "global.h"
 #include <unistd.h>
 
-
+/**
+ * 初始化事件树
+ * @param  ActiveEventNum 活动事件大小
+ * @return                树根
+ */
 EventTree* InitEventTree(unsigned int ActiveEventNum)
 {
     EventTree* eventTree = (EventTree*)malloc(sizeof(EventTree));
@@ -23,7 +27,14 @@ EventTree* InitEventTree(unsigned int ActiveEventNum)
     return eventTree;
 }
 
-EventNode* CreateEventNode(int fd, int event, void* handel)
+/**
+ * 创建新事件
+ * @param  fd     文件描述符
+ * @param  event  事件
+ * @param  task 回调函数
+ * @return        新节点地址
+ */
+EventNode* CreateEventNode(int fd, int event, void* task)
 {
     EventNode* newNode = malloc(sizeof(EventNode));
     if(newNode == NULL)
@@ -31,14 +42,20 @@ EventNode* CreateEventNode(int fd, int event, void* handel)
         printf("malloc error\n");
         exit(1);
     }
-    newNode->arg = newNode;
-    newNode->CallHandel = handel;
+    newNode->task->arg = newNode;
+    newNode->task = task;
+    // newNode->arg = newNode;
+    // newNode->CallHandel = handel;
     newNode->event = event;
     newNode->fd = fd;
     return newNode;
 }
 
-
+/**
+ * 添加新节点
+ * @param eventTree 事件树根
+ * @param newNode   新节点
+ */
 void AddEvent(EventTree* eventTree, EventNode* newNode)
 {
     struct epoll_event new;
@@ -50,6 +67,11 @@ void AddEvent(EventTree* eventTree, EventNode* newNode)
     pthread_mutex_unlock(&eventTree->TreeLock);
 }
 
+/**
+ * 删除事件
+ * @param eventTree 事件根节点
+ * @param newNode   要删除的节点
+ */
 void DeleteEvent(EventTree* eventTree, EventNode* deleteNode)
 {
 
@@ -60,6 +82,10 @@ void DeleteEvent(EventTree* eventTree, EventNode* deleteNode)
     pthread_mutex_unlock(&eventTree->TreeLock);
 }
 
+/**
+ * 循环监听事件
+ * @param eventTree 事件树
+ */
 void WaitEvent(EventTree* eventTree)
 {
     while(1)
@@ -70,8 +96,8 @@ void WaitEvent(EventTree* eventTree)
         for(int i=0; i<nready; i++)
         {
             EventNode* activeNode = (EventNode*)(eventTree->ActiveEvent[i].data.ptr);
-            activeNode->CallHandel(activeNode->arg);
-
+            // activeNode->CallHandel(activeNode->arg);
+            AddTask(pthreadPool, activeNode);
         }
         // nready = 0;
     }

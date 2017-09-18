@@ -6,12 +6,16 @@
 #include <pthread.h>
 #include <malloc.h>
 #include <stdlib.h>
+#include "BaseTask.h"
 
 typedef struct EventNode{
+    void* next;
+    void* pre;
     int fd;                            //socket
     int event;                         //事件
-    void (*CallHandel)(void* myself);  //回调函数
-    void* arg;                         //回调函数参数
+    Task* task;                        //任务
+    // void (*CallHandel)(void* myself);  //回调函数
+    // void* arg;                         //回调函数参数
 }EventNode;
 
 typedef struct EventTree{
@@ -33,10 +37,10 @@ EventTree* InitEventTree(unsigned int ActiveEventNum);
  * 创建新事件
  * @param  fd     文件描述符
  * @param  event  事件
- * @param  handel 回调函数
+ * @param  task   任务
  * @return        新节点地址
  */
-EventNode* CreateEventNode(int fd, int event, void* handel);
+EventNode* CreateEventNode(int fd, int event, void* task);
 
 
 /**
